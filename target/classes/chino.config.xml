@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<config>
+    <robot-name>智乃</robot-name>
+    <self-id>3178841582</self-id>
+    <superusers>
+        <superuser>2014559177</superuser>
+    </superusers>
+    <nicknames>
+        <nickname>小智乃</nickname>
+        <nickname>智乃酱</nickname>
+        <nickname>chino</nickname>
+        <nickname>chinochan</nickname>
+    </nicknames>
+    <listen-host>127.0.0.1</listen-host>
+    <listen-port>5701</listen-port>
+    <target-host>http://127.0.0.1</target-host>
+    <target-port>5700</target-port>
+    <plugin-position>com.homemylove.chino.plugins</plugin-position>
+</config>
