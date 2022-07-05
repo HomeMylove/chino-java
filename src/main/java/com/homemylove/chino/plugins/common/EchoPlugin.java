@@ -1,25 +1,25 @@
-package com.homemylove.chino.plugins;
+package com.homemylove.chino.plugins.common;
 
 import com.homemylove.chino.pojo.Echo;
 import com.homemylove.chino.service.EchoService;
-import com.homemylove.chino.service.impl.EchoServiceImpl;
-import com.homemylove.core.load.BotPlugin;
+import com.homemylove.core.load.Help;
 import com.homemylove.core.load.Message;
-import com.homemylove.core.load.RunPlugin;
+import com.homemylove.core.load.CommonPlugin;
 import com.homemylove.core.load.impl.Robot;
 import com.homemylove.core.reqfactory.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@BotPlugin(name = "Echo")
-public class EchoPlugin implements RunPlugin {
+public class EchoPlugin extends CommonPlugin {
 
-    private final EchoService echoService = new EchoServiceImpl();
+    private final EchoService echoService = null;
 
     @Override
     public boolean run(RequestBody requestBody, Robot robot) {
+        System.out.println("监测 echo");
         String message = requestBody.getMessage();
         String groupId = requestBody.getGroupId();
         Echo echo = null;
@@ -41,6 +41,19 @@ public class EchoPlugin implements RunPlugin {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Help getHelp(RequestBody requestBody, Robot robot) {
+        Help help = new Help("echo");
+        Map<String, String> helpMap = help.getHelpMap();
+        helpMap.put("echo", "echo A B");
+        helpMap.put("update", "update 10 C D");
+        helpMap.put("delete", "delete 10");
+        helpMap.put("show", "show | show keyword");
+
+        help.setPass(isPass(requestBody.getGroupId()));
+        return help;
     }
 
     public void addEcho(RequestBody requestBody, Robot robot) {
@@ -75,7 +88,6 @@ public class EchoPlugin implements RunPlugin {
         msg.setAtId(userId);
         robot.sendGroupMessage(msg);
     }
-
 
     public void updateEcho(RequestBody requestBody, Robot robot) {
         String rawStr = requestBody.getMessage().replace("update", "");
@@ -113,7 +125,6 @@ public class EchoPlugin implements RunPlugin {
         robot.sendGroupMessage(msg);
     }
 
-
     public void deleteEcho(RequestBody requestBody, Robot robot) {
         String message = requestBody.getMessage();
         String groupId = requestBody.getGroupId();
@@ -128,7 +139,6 @@ public class EchoPlugin implements RunPlugin {
             } else {
                 msg = new Message(groupId, "删除失败!!\r\n因为这句话不属于你");
             }
-            System.out.println(msg);
 
             msg.setAtId(userId);
             robot.sendGroupMessage(msg);
@@ -139,7 +149,6 @@ public class EchoPlugin implements RunPlugin {
             robot.sendGroupMessage(msg);
         }
     }
-
 
     public void showEcho(RequestBody requestBody, Robot robot) {
         String message = requestBody.getMessage();
@@ -155,12 +164,12 @@ public class EchoPlugin implements RunPlugin {
         StringBuilder sb = new StringBuilder();
         sb.append("智乃可以回答以下问题:\n").append("id\t\t\t\tQ\t\t\t\t\t\tA\n");
 
-        for(int i = 0; i < echoList.size(); i++){
+        for (int i = 0; i < echoList.size(); i++) {
             Echo echo = echoList.get(i);
             sb.append(echo.getId()).append(" ")
                     .append(echo.getQuestion()).append("---->").
                     append(echo.getAnswer());
-            if(i != echoList.size()-1){
+            if (i != echoList.size() - 1) {
                 sb.append("\n");
             }
         }

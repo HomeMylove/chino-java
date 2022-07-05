@@ -1,9 +1,12 @@
 package com.homemylove.core.reqfactory;
 
-public class Sender {
+public class MemberInfo {
     private Integer age;
     private String area;
     private String card;
+    private String groupId;
+    private Integer joinTime;
+    private Integer lastSentTime;
     private String level;
     private String nickname;
     private String role;
@@ -11,7 +14,7 @@ public class Sender {
     private String title;
     private String userId;
 
-    public Sender() {
+    public MemberInfo() {
     }
 
     public Integer getAge() {
@@ -36,6 +39,30 @@ public class Sender {
 
     public void setCard(String card) {
         this.card = card;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public Integer getJoinTime() {
+        return joinTime;
+    }
+
+    public void setJoinTime(Integer joinTime) {
+        this.joinTime = joinTime;
+    }
+
+    public Integer getLastSentTime() {
+        return lastSentTime;
+    }
+
+    public void setLastSentTime(Integer lastSentTime) {
+        this.lastSentTime = lastSentTime;
     }
 
     public String getLevel() {
@@ -66,8 +93,8 @@ public class Sender {
         return sex;
     }
 
-    public void setSex(String unknown) {
-        this.sex = unknown;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getTitle() {
@@ -86,16 +113,20 @@ public class Sender {
         this.userId = userId;
     }
 
+
     @Override
     public String toString() {
-        return "Sender{" +
+        return "MemberInfo{" +
                 "age=" + age +
                 ", area='" + area + '\'' +
                 ", card='" + card + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", joinTime=" + joinTime +
+                ", lastSentTime=" + lastSentTime +
                 ", level='" + level + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", role='" + role + '\'' +
-                ", unknown='" + sex + '\'' +
+                ", sex='" + sex + '\'' +
                 ", title='" + title + '\'' +
                 ", userId='" + userId + '\'' +
                 '}';

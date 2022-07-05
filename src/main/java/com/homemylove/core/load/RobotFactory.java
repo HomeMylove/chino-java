@@ -2,6 +2,8 @@ package com.homemylove.core.load;
 
 import com.homemylove.Main;
 import com.homemylove.core.handlers.RequestHandler;
+import com.homemylove.core.ioc.BeanFactory;
+import com.homemylove.core.ioc.impl.BeanFactoryImpl;
 import com.homemylove.core.load.impl.Robot;
 import com.homemylove.core.utils.ClassScanner;
 import org.w3c.dom.Document;
@@ -105,11 +107,27 @@ public class RobotFactory {
     }
 
     private static void loadPlugin(){
+        Map<String, BasePlugin> robotPlugins = robot.getPlugins();
+
+        // 从 bean 加载
+        // 有顺序
+        BeanFactoryImpl beanFactory = new BeanFactoryImpl();
+        Map<String, Object> beanMap = beanFactory.getBeanMap();
+        for (Map.Entry<String, Object> entry : beanMap.entrySet()) {
+            Object value = entry.getValue();
+            if(value instanceof BasePlugin){
+                BasePlugin basePlugin = (BasePlugin) value;
+                String pluginName = entry.getKey();
+                robotPlugins.put(pluginName,basePlugin);
+            }
+        }
+
+        // 扫描加载
+        // 排在后面
         String path = "com.homemylove.chino.plugins";
         String position = robot.getPluginPosition();
         path = position != null ? position : path;
         List<String> plugins = ClassScanner.scanClasses(path);
-        Map<String, RunPlugin> robotPlugins = robot.getPlugins();
         for(int i = 0; i < plugins.size();i++){
             String className = plugins.get(i);
             try {
@@ -118,7 +136,7 @@ public class RobotFactory {
                 if(flag){
                     BotPlugin annotation = clazz.getAnnotation(BotPlugin.class);
                     String pluginName = annotation.name();
-                    RunPlugin o =(RunPlugin) clazz.newInstance();
+                    BasePlugin o =(BasePlugin) clazz.newInstance();
                     robotPlugins.put(pluginName,o);
                 }
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {

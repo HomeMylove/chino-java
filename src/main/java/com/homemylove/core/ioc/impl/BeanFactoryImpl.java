@@ -11,11 +11,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BeanFactoryImpl implements BeanFactory {
-
-    private final Map<String,Object> beanMap = new HashMap<>();
+    private final Map<String,Object> beanMap = new LinkedHashMap<>();
 
     public BeanFactoryImpl(){
         this("applicationContext.xml");
@@ -80,6 +80,10 @@ public class BeanFactoryImpl implements BeanFactory {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public Map<String, Object> getBeanMap() {
+        return beanMap;
     }
 
     @Override

@@ -9,18 +9,18 @@ import java.util.List;
 public class EchoDAOImpl extends BaseDAO<Echo> implements EchoDAO {
     @Override
     public void addEcho(Echo echo) {
-        executeUpdate("insert into echo values (0,?,?,?,?)",echo.getGroupId(),echo.getUserId(),echo.getQuestion(),echo.getAnswer());
+        executeUpdate("insert into echo values (0,?,?,?,?)", echo.getGroupId(), echo.getUserId(), echo.getQuestion(), echo.getAnswer());
     }
 
     @Override
-    public Echo getEcho(String groupId, String question) {
-        return load("select * from echo where groupId = ? and question = ?",groupId,question);
+    public List<Echo> getEcho(String groupId, String question) {
+        return executeQuery("select * from echo where groupId = ? and question = ?", groupId, question);
     }
 
 
     @Override
     public void updateEcho(Echo echo) {
-        executeUpdate("update echo set question = ?, answer = ? where id = ?",echo.getQuestion(),echo.getAnswer(),echo.getId());
+        executeUpdate("update echo set question = ?, answer = ? where id = ?", echo.getQuestion(), echo.getAnswer(), echo.getId());
     }
 
     @Override
@@ -30,23 +30,33 @@ public class EchoDAOImpl extends BaseDAO<Echo> implements EchoDAO {
     }
 
     @Override
+    public Integer hasQuestion(String groupId, String userId, String question) {
+        Echo echo = load("select * from echo where groupId = ? and userId = ? and question = ?", groupId, userId, question);
+        if (echo == null)
+            return -1;
+        else
+            return echo.getId();
+    }
+
+
+    @Override
     public List<Echo> getEchoList(String groupId, String userId) {
-        return executeQuery("select * from echo where groupId = ? and userId = ?",groupId,userId);
+        return executeQuery("select * from echo where groupId = ? and userId = ?", groupId, userId);
     }
 
     @Override
     public void deleteEcho(Integer id) {
-        executeUpdate("delete from echo where id = ?",id);
+        executeUpdate("delete from echo where id = ?", id);
     }
 
     @Override
     public Echo getEchoById(Integer id) {
-        return load("select * from echo where id = ?",id);
+        return load("select * from echo where id = ?", id);
     }
 
     @Override
     public List<Echo> getEchoListByKeyword(String groupId, String keyword) {
-        return executeQuery("select * from echo where groupId = ? and question like ?",groupId,"%"+keyword+"%");
+        return executeQuery("select * from echo where groupId = ? and question like ?", groupId, "%" + keyword + "%");
     }
 
 

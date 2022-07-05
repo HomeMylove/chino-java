@@ -1,7 +1,6 @@
 package com.homemylove.chino.service.impl;
 
 import com.homemylove.chino.dao.EchoDAO;
-import com.homemylove.chino.dao.impl.EchoDAOImpl;
 import com.homemylove.chino.pojo.Echo;
 import com.homemylove.chino.service.EchoService;
 
@@ -9,16 +8,28 @@ import java.util.List;
 
 public class EchoServiceImpl implements EchoService {
 
-    private final EchoDAO echoDAO = new EchoDAOImpl();
+    private final EchoDAO echoDAO = null;
 
     @Override
     public void addEcho(Echo echo) {
-        echoDAO.addEcho(echo);
+        Integer id = echoDAO.hasQuestion(echo.getGroupId(), echo.getUserId(), echo.getQuestion());
+        if(id != -1){
+            echo.setId(id);
+            echoDAO.updateEcho(echo);
+        }else {
+            echoDAO.addEcho(echo);
+        }
+
     }
 
     @Override
     public Echo getEcho(String groupId, String question) {
-        return echoDAO.getEcho(groupId, question);
+        List<Echo> echoList = echoDAO.getEcho(groupId, question);
+        int size = echoList.size();
+        if(size==0){
+            return null;
+        }
+        return echoList.get((int) (Math.random() * size));
     }
 
     @Override

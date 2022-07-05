@@ -12,4 +12,21 @@
         ]>
 
 <beans>
+<!--    plugin-->
+    <bean id="nameJudge" class="com.homemylove.chino.plugins.enhance.NameJudgePlugin"/>
+
+
+    <bean id="signIn" class="com.homemylove.chino.plugins.common.SignInPlugin"></bean>
+    <bean id="diceGame" class="com.homemylove.chino.plugins.common.DiceGamePlugin"/>
+    <bean id="echo" class="com.homemylove.chino.plugins.common.EchoPlugin">
+        <property name="echoService" ref="echoService"/>
+    </bean>
+
+<!--    dao-->
+    <bean id="echoDAO" class="com.homemylove.chino.dao.impl.EchoDAOImpl"/>
+
+<!--    service-->
+    <bean id="echoService" class="com.homemylove.chino.service.impl.EchoServiceImpl">
+        <property name="echoDAO" ref="echoDAO"/>
+    </bean>
 </beans>

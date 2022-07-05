@@ -1,9 +1,12 @@
 package com.homemylove.core.load.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.homemylove.core.load.BasePlugin;
 import com.homemylove.core.load.Message;
-import com.homemylove.core.load.RunPlugin;
 import com.homemylove.core.load.RobotInter;
+import com.homemylove.core.reqfactory.MemberInfo;
 import com.homemylove.core.utils.HttpRequest;
+import com.homemylove.core.utils.JSONUtil;
 import com.homemylove.core.utils.StringUtil;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -11,10 +14,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executors;
 
 public class Robot implements RobotInter {
@@ -23,7 +23,7 @@ public class Robot implements RobotInter {
     private final List<String> superusers = new ArrayList<>();
     private final List<String> nicknames = new ArrayList<>();
 
-    private final Map<String, RunPlugin> plugins = new HashMap<>();
+    private final Map<String, BasePlugin> plugins = new LinkedHashMap<>();
 
     private HttpServer httpServer;
 
@@ -78,6 +78,23 @@ public class Robot implements RobotInter {
         HttpRequest.sendGet(url, params);
     }
 
+    public MemberInfo getGroupMemberInfo(String groupId, String userId) {
+        try {
+            String result = HttpRequest.sendGet(String.format("%s:%s/get_group_member_info?group_id=%s&user_id=%s", targetHost, targetPort, groupId, userId));
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if (!jsonObject.get("status").equals("ok")) {
+                return null;
+            }
+            Object data = jsonObject.get("data");
+            return JSONUtil.jsonObjToJavaObj((JSONObject) data, MemberInfo.class);
+        } catch (Exception e) {
+            throw new RuntimeException("获取信息失败", e);
+        }
+
+
+    }
+
+
     public String getName() {
         return name;
     }
@@ -99,7 +116,7 @@ public class Robot implements RobotInter {
         }
     }
 
-    public Map<String, RunPlugin> getPlugins() {
+    public Map<String, BasePlugin> getPlugins() {
         return plugins;
     }
 

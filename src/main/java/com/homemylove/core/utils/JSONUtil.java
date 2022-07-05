@@ -32,7 +32,9 @@ public class JSONUtil {
                     try {
                         if (typeName.equals("java.lang.Integer") || typeName.equals("java.lang.Long") || typeName.equals("java.lang.Double"))
                             field.set(t, Integer.parseInt(o.toString()));
-                        else if (typeName.equals("java.lang.String")) {
+                        else if (typeName.equals("")) {
+                            
+                        } else if (typeName.equals("java.lang.String")) {
                             field.set(t, o.toString());
                         }
                     } catch (IllegalAccessException e) {
@@ -54,7 +56,8 @@ public class JSONUtil {
             return fieldType.equals(Integer.class) ||
                     fieldType.equals(String.class) ||
                     fieldType.equals(Long.class) ||
-                    fieldType.equals(Double.class);
+                    fieldType.equals(Double.class) ||
+                    fieldType.equals(boolean.class);
         }
         return false;
     }
